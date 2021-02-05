@@ -6,8 +6,6 @@ Simple blog page using react-seed to play with new stuff.
 ## Quick-start
 
 ```bash
-git clone https://github.com/patternfly/patternfly-react-seed
-cd patternfly-react-seed 
 npm install && npm run start:dev 
 ```
 ## Development Scripts
