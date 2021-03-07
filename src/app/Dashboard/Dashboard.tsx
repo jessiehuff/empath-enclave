@@ -1,56 +1,26 @@
 import * as React from 'react';
-import { Gallery, PageSection, TextContent, Text, Title } from '@patternfly/react-core';
-import { BlogCard } from './BlogCard';
-import ReactMarkdown from 'react-markdown';
-import DOMPurify from 'dompurify';
-import markdown from '@app/Dashboard/Posts/my-first-post.md';
+import { Gallery, PageSection, TextContent, Text, Title, Card } from '@patternfly/react-core';
 
-// React.useEffect(() => {
-//   const script = document.createElement('script');
-//   script.innerHTML = JSON.stringify(model(files), null, 2);
-//   script.type = 'application/ld+json';
-//   script.setAttribute('data-id', 'audio-list');
-//   const sanitizedScript = DOMPurify.sanitize(script, { IN_PLACE: true });
-//   document.body.appendChild(sanitizedScript);
-//   return () => {
-//     document.body.removeChild(sanitizedScript);
-//   }
-// }, [files]);
+const markdownContext = require.context('./Posts/', false, /\.md$/);
 
-// const importAll = (r) => r.keys().map(r);
-// const markdownFiles = importAll(require.context('./Posts', false, /\.md$/))
-//   .sort()
-//   .reverse();
+const markdownFiles = markdownContext.keys().map(filePath => markdownContext(filePath))
 
 export interface DashboardProps  extends React.HTMLProps<HTMLElement> {
   activeCard?: boolean;
   posts?: React.ReactNode;
   res?: React.ReactNode;
 }
-
 class Dashboard extends React.Component {
   constructor(props: any){
     super(props);
 
     this.state = {
-      activeCard: null,
-      posts: [],
-      res: []
+      posts: []
     };
-
   }
-
-  // async componentDidMount() {
-  //   const posts = await Promise.all(markdownFiles.map((file) => fetch(file).then((res) => res.text())))
-  //     .catch((err) => console.error(err));
-
-  //   this.setState((state) => ({ ...state, posts }));
-  // }
 
     render() {
       /* eslint-disable react/no-array-index-key */
-      // const { posts } = this.state;
-
       return (
         <React.Fragment>
           <PageSection>
@@ -59,19 +29,15 @@ class Dashboard extends React.Component {
             </TextContent>
             <br/>
             <Gallery hasGutter>
-            <div dangerouslySetInnerHTML={{ __html: markdown }} />
-            {
-              // posts.map((post, idx) => (
-                <div className="card" >
-                  <div className="card-content">
-                    <div className="content">
-                      {/* <ReactMarkdown source={post} /> */}
-                    </div>
-                  </div>
-                </div>
-              // ))
-            }
-
+            {markdownFiles.map((el, idx) => {
+              return (
+                <Card 
+                  isHoverable
+                >
+                  <div key={idx} className="markdown-body" dangerouslySetInnerHTML={{ __html: el }} />
+                </Card>
+              )
+              })}
               {/* <Card
                 isHoverable
                 key={key}
